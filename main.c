@@ -7,6 +7,7 @@
 #include <unistd.h>
 
 #include "config.h"
+#include "wiring.h"
 
 #include "azure_c_shared_utility/platform.h"
 #include "azure_c_shared_utility/threadapi.h"
