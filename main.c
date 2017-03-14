@@ -33,7 +33,7 @@ static void sendCallback(IOTHUB_CLIENT_CONFIRMATION_RESULT result, void* userCon
     messagePending = false;
 }
 
-void sendMessage(IOTHUB_CLIENT_LL_HANDLE iotHubClientHandle, char * buffer){
+static void sendMessage(IOTHUB_CLIENT_LL_HANDLE iotHubClientHandle, char * buffer){
     IOTHUB_MESSAGE_HANDLE messageHandle = IoTHubMessage_CreateFromByteArray(buffer, strlen(buffer));
     if (messageHandle == NULL)
     {
@@ -56,7 +56,7 @@ void sendMessage(IOTHUB_CLIENT_LL_HANDLE iotHubClientHandle, char * buffer){
     }
 }
 
-char *get_device_id(char *str)
+static char *get_device_id(char *str)
 {
     char *substr = strstr(str, "DeviceId=");
 

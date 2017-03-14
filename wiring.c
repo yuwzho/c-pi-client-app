@@ -7,6 +7,7 @@ int readMessage(int messageId, char *payload)
 
 float random(int min, int max)
 {
+    srand((unsigned int)time(NULL));
     return min + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX * (max - min)));
 }
 #else
