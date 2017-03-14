@@ -74,6 +74,6 @@ void blinkLED()
 
 void setupWiring()
 {
-    wiringPiSetup();
+    check_bme_init();
     pinMode(LED_PIN, OUTPUT);
 }

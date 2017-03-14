@@ -19,7 +19,7 @@
 
 static bool messagePending = false;
 
-static void sendCallback(IOTHUB_CLIENT_CONFIRMATION_RESULT result, void* userContextCallback)
+static void sendCallback(IOTHUB_CLIENT_CONFIRMATION_RESULT result, void *userContextCallback)
 {
     if (IOTHUB_CLIENT_CONFIRMATION_OK == result)
     {
@@ -33,7 +33,8 @@ static void sendCallback(IOTHUB_CLIENT_CONFIRMATION_RESULT result, void* userCon
     messagePending = false;
 }
 
-static void sendMessage(IOTHUB_CLIENT_LL_HANDLE iotHubClientHandle, char * buffer){
+static void sendMessages(IOTHUB_CLIENT_LL_HANDLE iotHubClientHandle, char *buffer)
+{
     IOTHUB_MESSAGE_HANDLE messageHandle = IoTHubMessage_CreateFromByteArray(buffer, strlen(buffer));
     if (messageHandle == NULL)
     {
@@ -194,15 +195,15 @@ int main(int argc, char *argv[])
                 if (!messagePending)
                 {
                     ++count;
-                    char buffer[BUFFER_SIZE];
-
-                    if (readMessage(count, buffer) != 1)
+                    char *buffer = calloc(sizeof(char), BUFFER_SIZE);
+                    if (buffer != NULL)
                     {
-                        printf("Read message error");
-                    }
-                    else
-                    {
-                        sendMessage(iothubClientHandle, buffer);
+                        int readMessageResult = readMessage(count, buffer);
+                        if (readMessageResult == 1)
+                        {
+                            sendMessages(iotHubClientHandle, buffer);
+                        }
+                        free(buffer);
                     }
                     delay(INTERVAL);
                 }
