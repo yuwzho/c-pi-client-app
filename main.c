@@ -27,7 +27,7 @@ static void sendCallback(IOTHUB_CLIENT_CONFIRMATION_RESULT result, void *userCon
     }
     else
     {
-        printf("Failed to send message to Azure IoT Hub\r\n");
+        (void)printf("Failed to send message to Azure IoT Hub\r\n");
     }
 
     messagePending = false;
@@ -38,19 +38,19 @@ static void sendMessages(IOTHUB_CLIENT_LL_HANDLE iotHubClientHandle, char *buffe
     IOTHUB_MESSAGE_HANDLE messageHandle = IoTHubMessage_CreateFromByteArray(buffer, strlen(buffer));
     if (messageHandle == NULL)
     {
-        printf("Unable to create a new IoTHubMessage\r\n");
+        (void)printf("Unable to create a new IoTHubMessage\r\n");
     }
     else
     {
-        printf("Sending message: %s\r\n", buffer);
+        (void)printf("Sending message: %s\r\n", buffer);
         if (IoTHubClient_LL_SendEventAsync(iotHubClientHandle, messageHandle, sendCallback, NULL) != IOTHUB_CLIENT_OK)
         {
-            printf("Failed to send message to Azure IoT Hub\r\n");
+            (void)printf("Failed to send message to Azure IoT Hub\r\n");
         }
         else
         {
             messagePending = true;
-            printf("Message sent to Azure IoT Hub\r\n");
+            (void)printf("Message sent to Azure IoT Hub\r\n");
         }
 
         IoTHubMessage_Destroy(messageHandle);
@@ -86,7 +86,7 @@ static char *readFile(char *fileName)
 
     if (fp == NULL)
     {
-        printf("ERROR: File %s doesn't exist!\n", fileName);
+        (void)printf("ERROR: File %s doesn't exist!\n", fileName);
         return NULL;
     }
 
@@ -100,7 +100,7 @@ static char *readFile(char *fileName)
     if (buffer == NULL)
     {
         fclose(fp);
-        printf("ERROR: Failed to allocate memory.\n");
+        (void)printf("ERROR: Failed to allocate memory.\n");
         return NULL;
     }
 
@@ -109,7 +109,7 @@ static char *readFile(char *fileName)
     {
         fclose(fp);
         free(buffer);
-        printf("ERROR: Failed to read the file %s into memory.\n", fileName);
+        (void)printf("ERROR: Failed to read the file %s into memory.\n", fileName);
         return NULL;
     }
 
@@ -135,7 +135,7 @@ static bool setX509Certificate(IOTHUB_CLIENT_LL_HANDLE iotHubClientHandle, char 
         IoTHubClient_LL_SetOption(iotHubClientHandle, OPTION_X509_CERT, x509certificate) != IOTHUB_CLIENT_OK ||
         IoTHubClient_LL_SetOption(iotHubClientHandle, OPTION_X509_PRIVATE_KEY, x509privatekey) != IOTHUB_CLIENT_OK)
     {
-        printf("ERROR: Failed to set options for x509.\n");
+        (void)printf("ERROR: Failed to set options for x509.\n");
         return false;
     }
 
@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
 {
     if (argc < 2)
     {
-        printf("Usage: %s <IoT hub device connection string>\r\n", argv[0]);
+        (void)printf("Usage: %s <IoT hub device connection string>\r\n", argv[0]);
         return 1;
     }
 
@@ -160,7 +160,7 @@ int main(int argc, char *argv[])
 
     if (device_id_src == NULL)
     {
-        printf("ERROR: Cannot parse device id from IoT device connection string\n");
+        (void)printf("ERROR: Cannot parse device id from IoT device connection string\n");
         return 1;
     }
     snprintf(device_id, sizeof(device_id), "%s", device_id_src);
@@ -170,7 +170,7 @@ int main(int argc, char *argv[])
 
     if (platform_init() != 0)
     {
-        printf("Failed to initialize the platform.\r\n");
+        (void)printf("Failed to initialize the platform.\r\n");
     }
     else
     {
@@ -195,15 +195,17 @@ int main(int argc, char *argv[])
                 if (!messagePending)
                 {
                     ++count;
-                    char *buffer = calloc(sizeof(char), BUFFER_SIZE);
+                    char buffer[BUFFER_SIZE];
                     if (buffer != NULL)
                     {
-                        int readMessageResult = readMessage(count, buffer);
-                        if (readMessageResult == 1)
+                        if (readMessage(count, buffer) == 1)
                         {
                             sendMessages(iotHubClientHandle, buffer);
                         }
-                        free(buffer);
+                        else
+                        {
+                            (void)printf("Failed to read message\r\n");
+                        }
                     }
                     delay(INTERVAL);
                 }
