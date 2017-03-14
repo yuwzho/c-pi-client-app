@@ -1,4 +1,4 @@
-#include <cstdlib>
+#include <time.h>
 #include <wiringPi.h>
 #include <wiringPiSPI.h>
 

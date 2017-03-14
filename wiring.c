@@ -7,7 +7,7 @@ int readMessage(int messageId, char *payload)
 
 float random(int min, int max)
 {
-    return min + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (max - min)));
+    return min + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX * (max - min)));
 }
 #else
 static unsigned int BMEInitMark = 0;
