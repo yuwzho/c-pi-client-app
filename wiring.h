@@ -18,3 +18,4 @@
 
 int readMessage(int messageId, char *payload);
 void blinkLED();
+void setupWiring();

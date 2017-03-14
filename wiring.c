@@ -70,3 +70,9 @@ void blinkLED()
     delay(100);
     digitalWrite(LED_PIN, LOW);
 }
+
+void setupWiring()
+{
+    wiringPiSetup();
+    pinMode(LED_PIN, OUTPUT);
+}
