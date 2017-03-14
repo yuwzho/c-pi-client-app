@@ -1,3 +1,5 @@
+static unsigned int BMEInitMark = 0;
+
 #if SIMULATED_DATA
 int readMessage(int messageId, char *payload)
 {
@@ -11,8 +13,6 @@ float random(int min, int max)
     return min + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX * (max - min)));
 }
 #else
-static unsigned int BMEInitMark = 0;
-
 int mask_check(int check, int mask)
 {
     return (check & mask) == mask;
@@ -74,6 +74,9 @@ void blinkLED()
 
 void setupWiring()
 {
-    check_bme_init();
+    if (wiringPiSetup() == 0)
+    {
+        BMEInitMark |= WIRINGPI_SETUP;
+    }
     pinMode(LED_PIN, OUTPUT);
 }
