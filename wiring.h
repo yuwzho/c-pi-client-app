@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <time.h>
 #include <wiringPi.h>
 #include <wiringPiSPI.h>

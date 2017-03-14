@@ -43,7 +43,7 @@ int check_bme_init()
         return -1;
     }
     BMEInitMark |= BME_INIT;
-    return 0;
+    return 1;
 }
 
 // check the BMEInitMark value is equal to the (WIRINGPI_SETUP | SPI_SETUP | BME_INIT)
@@ -62,7 +62,7 @@ int readMessage(int messageId, char *payload)
         return -1;
     }
 
-    snprintf(payload, sizeof(payload), "{ messageId: %d, temperature: %f, humidity: %f }", messageId, temperature, humidity);
+    snprintf(payload, BUFFER_SIZE, "{ messageId: %d, temperature: %f, humidity: %f }", messageId, temperature, humidity);
     return 1;
 }
 #endif
