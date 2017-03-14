@@ -1,3 +1,5 @@
+#include "wiring.h"
+
 static unsigned int BMEInitMark = 0;
 
 #if SIMULATED_DATA
